@@ -111,11 +111,22 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
     }
 
     override fun onMapReady(p0: GoogleMap) {
-        _viewModel.showSnackBarInt.value = R.string.select_poi
+        _viewModel.showToast.value = getString(R.string.select_poi)
         map = p0
         enableLocation()
         setOnPOISelected()
         setOnMapClicked()
+        setMapStyle()
+    }
+
+    private fun setMapStyle() {
+        try {
+            val success = map.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireActivity(),R.raw.map_style))
+            if(success) Log.d("hussein","successfully loaded the map")
+            else Log.d("hussein","error happens while applying map style")
+        } catch (ex:Exception){
+            _viewModel.showToast.value = ex.message
+        }
     }
 
     private fun setOnMapClicked() {
